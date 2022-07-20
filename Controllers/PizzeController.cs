@@ -49,5 +49,63 @@ namespace la_mia_pizzeria_static.Controllers
             Pizza pizza = context.Pizzas.Where(pizza => pizza.Id == id).Include("Ingredients").FirstOrDefault();
             return View(pizza);
         }
+
+        public IActionResult EditForm(int Id)
+        {
+            PizzaContext context = new PizzaContext();
+            Pizza ToEdit = context.Pizzas.Where(p => p.Id == Id).First();
+
+            if(ToEdit == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(ToEdit);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int Id, Pizza editedPizza)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("EditForm", editedPizza);
+            }
+            PizzaContext context = new PizzaContext();
+            Pizza toEdit = context.Pizzas.Where(p => p.Id == Id).First();
+            if(toEdit != null)
+            {
+                toEdit.Name = editedPizza.Name;
+                toEdit.Description = editedPizza.Description;
+                toEdit.Price = editedPizza.Price;
+                toEdit.ImageUrl = editedPizza.ImageUrl;
+                context.SaveChanges();  
+            }
+            else
+            {
+                return NotFound();
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int Id)
+        {
+            PizzaContext context = new PizzaContext();
+            Pizza toDelete = context.Pizzas.Where(p => p.Id == Id).First();
+            
+            if(toDelete != null)
+            {
+                context.Pizzas.Remove(toDelete);
+                context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
     }
 }

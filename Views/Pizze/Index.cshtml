@@ -26,6 +26,8 @@ else
                                         <h4 class="card-title mt-0 ">@pizza.Name</h4>
                                     </div>
                                     <div class="card-footer">
+                                        <a class="btn btn-primary" href="@Url.Action("EditForm", "Pizze", new {Id = pizza.Id})">Edit</a>
+                                        <a class="btn btn-danger" href="@Url.Action("Delete", "Pizze", new {Id = pizza.Id})">Delete</a>
                                     </div>
                                 </div>
                             </div>

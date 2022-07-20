@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - la mia pizzeria static</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/la_mia_pizzeria_static.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="container">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark mb-3">
+            <div class="container-fluid justify-content-around">
+                <a class="navbar-brand me-5" asp-area="" asp-controller="Pizze" asp-action="Index">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 text-center">
+                        <li class="nav-item flex-grow-1">
+                            <a class="nav-link text-danger" asp-area="" asp-controller="Home" asp-action="Prenota">Prenota</a>
+                        </li>
+                        <li class="nav-item flex-grow-1">
+                            <a class="nav-link text-danger" asp-area="" asp-controller="Home" asp-action="Impasto">Impasto</a>
+                        </li>
+                        <li class="nav-item flex-grow-1">
+                            <a class="nav-link text-danger" asp-area="" asp-controller="Home" asp-action="Contatti">Contatti</a>
+                        </li>
+                        <li class="nav-item flex-grow-1">
+                            <a class="nav-link text-danger" asp-area="" asp-controller="Pizze" asp-action="CreateForm">Aggiungi Pizza</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            <div class="row text-center mt-5">
+                <div class="col">
+                    <h5>DOVE SIAMO</h5>
+                    <p>
+                        Via Raiberti, 14 – Monza <br />20900
+                    </p>
+                    <p>
+                        Corso Matteotti 44 – Seregno <br />20831
+                    </p>
+                </div>
+                <div class="col">
+                    <h5>ORARI MONZA</h5>
+                    <p>
+                        Lun-Ven <br />19.00/23.30
+                    </p
+                    <p>
+                        Sab-Dom <br />12.00/15.00<br />19.00/23.30
+                    </p>
+                </div>
+                <div class="col">
+                    <h5>ORARI SEREGNO</h5>
+                    <p>
+                        Lun-Ven <br />19.00/23.30
+                    </p>
+                    <p>
+                        Sab-Dom <br />12.00/14.30<br />19.00/23.30
+                    </p>
+                </div>
+                <div class="col">
+                    <h5>CONTATTI</h5>
+                    <p>
+                        Tel. Monza: 039 2911871<br />
+                        Tel. Seregno 0362 284965<br />
+                        Info@bollepizzeria.it<br />
+                        seregno@bollepizzeria.it
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

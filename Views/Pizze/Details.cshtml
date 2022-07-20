@@ -1,0 +1,17 @@
+﻿@model Pizza
+
+<div class="container d-flex">
+    <div class="flex-grow-1">
+        <img class="img-fluid" src=@Model.ImageUrl />
+    </div>
+    <div class="flex-grow-2 ps-5">
+        <h2>@Model.Name</h2>
+        <p>@Model.Description</p>
+        <h3>Ingredients: </h3>
+        @foreach(Ingredient ingredient in @Model.Ingredients)
+        {
+            <p class="py-0 ps-3 my-0">@ingredient.Name</p>
+        }
+        <p class="py-4">@Model.Price</p>
+    </div>
+</div>

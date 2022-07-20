@@ -1,0 +1,39 @@
+﻿@model IQueryable<Pizza>
+
+@{
+    ViewData["Title"] = "Le Nostre Pizze";
+}
+
+@if(Model.Count() == 0)
+{
+    <div class="container text-center">
+        <h1>NON CI SONO PIZZE DISPONIBILI IN ELENCO</h1>
+    </div>
+}
+else
+{
+    <section class="wrapper">
+    <div class="container">
+
+        <div class="row">
+                @foreach(Pizza pizza in Model)
+                {
+                    <div class="col-sm-12 col-md-6 col-lg-4 mb-4">
+                        <a href="@Url.Action("Details", "Pizze", new {Id = pizza.Id})">
+                            <div class="card text-white card-has-bg click-col" style="background-image: url(@pizza.ImageUrl); ">
+                                <div class="card-img-overlay d-flex flex-column">
+                                    <div class="card-body">
+                                        <h4 class="card-title mt-0 ">@pizza.Name</h4>
+                                    </div>
+                                    <div class="card-footer">
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+        </div>
+  
+    </div>
+    </section>
+}

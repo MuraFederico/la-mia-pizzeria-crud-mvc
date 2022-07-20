@@ -25,6 +25,7 @@ namespace la_mia_pizzeria_static.Controllers
             PizzaRelationships model = new PizzaRelationships();
 
             model.Categories = context.Categories.ToList();
+            model.Ingredients = context.Ingredients.ToList();
             model.Pizza = new Pizza();
 
             return View(model);
@@ -54,6 +55,7 @@ namespace la_mia_pizzeria_static.Controllers
 
             return RedirectToAction("Index");
         }
+        [HttpGet]
         public IActionResult Details(int id)
         {
             PizzaContext context = new PizzaContext();

@@ -2,13 +2,16 @@
 
 <div class="container d-flex">
     <div class="flex-grow-1">
-        @if (@Model.ImageUrl != null)
+        @if(Model != null)
         {
             <img class="img-fluid" src=@Model.ImageUrl />
         }
     </div>
     <div class="flex-grow-2 ps-5">
         <h2>@Model.Name</h2>
+        @if(Model.Category != null){
+            <h3>@Model.Category.Name</h3>
+        }
         <p>@Model.Description</p>
         <h3>Ingredients: </h3>
         @foreach(Ingredient ingredient in @Model.Ingredients)

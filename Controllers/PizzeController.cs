@@ -2,6 +2,7 @@
 using la_mia_pizzeria_static.Models;
 using la_mia_pizzeria_static.RelationshipsModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace la_mia_pizzeria_static.Controllers
@@ -25,7 +26,15 @@ namespace la_mia_pizzeria_static.Controllers
             PizzaRelationships model = new PizzaRelationships();
 
             model.Categories = context.Categories.ToList();
-            model.Ingredients = context.Ingredients.ToList();
+            model.Ingredients = new List<SelectListItem>();
+
+            List<Ingredient> ingredients = context.Ingredients.ToList();
+
+            foreach (Ingredient ingredient in ingredients)
+            {
+                model.Ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() });
+            }
+
             model.Pizza = new Pizza();
 
             return View(model);
@@ -41,14 +50,28 @@ namespace la_mia_pizzeria_static.Controllers
                 using (PizzaContext context = new PizzaContext())
                 {
                     model.Categories = context.Categories.ToList();
+                    List<Ingredient> ingredients = context.Ingredients.ToList();
+
+                    foreach (Ingredient ingredient in ingredients)
+                    {
+                        model.Ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() });
+                    }
+
                     return View("CreateForm", model);
                 }
             }
 
             using(PizzaContext context = new PizzaContext())
             {
-                List<Ingredient> ingredients = context.Ingredients.ToList();
-                model.Pizza.Ingredients = ingredients;
+                if(model.SelectedIngredients != null)
+                {
+                    model.Pizza.Ingredients = new List<Ingredient>();
+                    foreach (string ingredientId in model.SelectedIngredients)
+                    {
+                        Ingredient ing = context.Ingredients.Where(i => i.Id == int.Parse(ingredientId)).FirstOrDefault();
+                        model.Pizza.Ingredients.Add(ing);
+                    }
+                }
                 context.Add(model.Pizza);
                 context.SaveChanges();
             }
@@ -68,8 +91,7 @@ namespace la_mia_pizzeria_static.Controllers
             PizzaContext context = new PizzaContext();
             PizzaRelationships model = new PizzaRelationships();
 
-            model.Categories = context.Categories.ToList();
-            model.Pizza = context.Pizzas.Where(p => p.Id == Id).First();
+            model.Pizza = context.Pizzas.Where(p => p.Id == Id).Include("Ingredients").First();
 
             if(model.Pizza == null)
             {
@@ -77,6 +99,22 @@ namespace la_mia_pizzeria_static.Controllers
             }
             else
             {
+                model.Categories = context.Categories.ToList();
+                model.Ingredients = new List<SelectListItem>();
+
+                List<Ingredient> ingredients = context.Ingredients.ToList();
+
+                foreach (Ingredient ingredient in ingredients)
+                {
+                    model.Ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() });
+                }
+
+                model.SelectedIngredients = new List<string>();
+                foreach (Ingredient ing in model.Pizza.Ingredients)
+                {
+                    model.SelectedIngredients.Add(ing.Id.ToString());
+                }
+
                 return View(model);
             }
         }
@@ -90,12 +128,18 @@ namespace la_mia_pizzeria_static.Controllers
                 using (PizzaContext context = new PizzaContext())
                 {
                     model.Categories = context.Categories.ToList();
+                    List<Ingredient> ingredients = context.Ingredients.ToList();
+
+                    foreach (Ingredient ingredient in ingredients)
+                    {
+                        model.Ingredients.Add(new SelectListItem { Text = ingredient.Name, Value = ingredient.Id.ToString() });
+                    }
                     return View("EditForm", model);
                 }
             }
             using (PizzaContext context = new PizzaContext())
             {
-                Pizza toEdit = context.Pizzas.Where(p => p.Id == Id).First();
+                Pizza toEdit = context.Pizzas.Where(p => p.Id == Id).Include("Ingredients").First();
                 if (toEdit != null)
                 {
                     toEdit.Name = model.Pizza.Name;
@@ -103,6 +147,16 @@ namespace la_mia_pizzeria_static.Controllers
                     toEdit.Price = model.Pizza.Price;
                     toEdit.ImageUrl = model.Pizza.ImageUrl;
                     toEdit.CategoryId = model.Pizza.CategoryId;
+                    toEdit.Ingredients.Clear();
+                    if (model.SelectedIngredients != null)
+                    {
+                        toEdit.Ingredients = new List<Ingredient>();
+                        foreach (string ingredientId in model.SelectedIngredients)
+                        {
+                            Ingredient ing = context.Ingredients.Where(i => i.Id == int.Parse(ingredientId)).FirstOrDefault();
+                            toEdit.Ingredients.Add(ing);
+                        }
+                    }
                     context.SaveChanges();
                 }
                 else
